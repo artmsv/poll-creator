@@ -5,9 +5,13 @@ import { Button } from '../components/button.tsx';
 export function ViewPolls() {
   const [polls, setPolls] = useState<Array<pollService.PollWithMetadata>>([]);
   const [selectedPollIndex, setSelectedPollIndex] = useState<number | null>(null);
+  // flag to indicate when list is loading
   const [isLoading, setLoading] = useState(true);
+  // flag to indicate when deleting
   const [isPending, setPending] = useState(false);
+  // Page level error message if poll list request failed
   const [pollsLoadError, setPollsLoadError] = useState<string>('');
+  // Error message if poll deletion fails
   const [deleteError, setDeleteError] = useState('');
 
   useEffect(() => {

@@ -14,110 +14,11 @@ function cleanPollData(): Poll {
   };
 }
 
-export interface TextInputProps {
-  label: string;
-  placeholder: string;
-  disabled: boolean;
-  value: string;
-  onChange: (value: string) => void;
-  inputRef?: React.RefObject<HTMLInputElement | null>;
-}
-export function TextInput({ label, value, onChange, placeholder, inputRef, disabled }: TextInputProps) {
-  const id = useId();
-
-  return (
-    <div className="mb-7">
-      <label className="block mb-4 font-medium text-lg" htmlFor={id}>
-        {label}
-      </label>
-      <input
-        className="block w-full h-8 border-b-[1px] border-tertiary"
-        type="text"
-        id={id}
-        ref={inputRef}
-        placeholder={placeholder}
-        value={value}
-        onChange={e => onChange(e.target.value)}
-        disabled={disabled}
-      />
-    </div>
-  );
-}
-
-export interface OptionInputProps {
-  label: string;
-  placeholder: string;
-  disabled: boolean;
-  options: Poll['options'];
-  onAdd: (option: string, clearInputCb: () => void) => void;
-  onRemove: (id: number) => void;
-  inputRef: React.RefObject<HTMLInputElement | null>;
-}
-export function OptionInput({ options, onAdd, onRemove, inputRef, label, placeholder, disabled }: OptionInputProps) {
-  const [optionValue, setOptionValue] = useState('');
-  const id = useId();
-
-  function handleAddOption() {
-    onAdd(optionValue.trim(), () => setOptionValue(''));
-  }
-
-  function handleKeyDown(event: React.KeyboardEvent<HTMLInputElement>) {
-    if (event.key === 'Enter') {
-      event.preventDefault(); // Prevent form submission when Enter key is pressed
-      handleAddOption();
-    }
-  }
-
-  return (
-    <div className="mb-7">
-      <label className="block mb-4 font-medium text-lg" htmlFor={id}>
-        {label}
-      </label>
-      <div className="flex gap-1">
-        <input
-          className="flex-grow h-8 border-b-[1px] border-tertiary"
-          type="text"
-          value={optionValue}
-          onChange={e => setOptionValue(e.target.value)}
-          onKeyDown={handleKeyDown}
-          id={id}
-          ref={inputRef}
-          placeholder={placeholder}
-          disabled={disabled}
-        />
-        <button
-          className="text-3xl leading-none text-white bg-primary rounded-full w-[1.1em] active:bg-[#227A66]"
-          type="button"
-          onClick={handleAddOption}
-          disabled={disabled}
-        >
-          +
-        </button>
-      </div>
-      {options.length > 0 && (
-        <div className="border border-tertiary mt-4">
-          {options.map(option => (
-            <div key={option.id} className="flex gap-4 w-full border-b border-tertiary last:border-none p-3">
-              <p className="flex-1 font-medium text-xl overflow-hidden text-ellipsis">{option.text}</p>
-              <button
-                type="button"
-                onClick={() => onRemove(option.id)}
-                className="font-medium text-xs text-primary"
-                disabled={disabled}
-              >
-                Remove
-              </button>
-            </div>
-          ))}
-        </div>
-      )}
-    </div>
-  );
-}
-
-export function CreatePollForm() {
+export function CreatePoll() {
   const [pollData, setPollData] = useState<Poll>(() => cleanPollData());
+  // generic error message
   const [error, setError] = useState('');
+  // pending flag for form submission
   const [isPending, setPending] = useState(false);
 
   const questionInputRef = useRef<HTMLInputElement>(null);
@@ -217,6 +118,109 @@ export function CreatePollForm() {
           </Button>
         </div>
       </form>
+    </div>
+  );
+}
+
+export interface TextInputProps {
+  label: string;
+  placeholder: string;
+  disabled: boolean;
+  value: string;
+  onChange: (value: string) => void;
+  inputRef: React.RefObject<HTMLInputElement | null>;
+}
+export function TextInput({ label, value, onChange, placeholder, inputRef, disabled }: TextInputProps) {
+  const id = useId();
+
+  return (
+    <div className="mb-7">
+      <label className="block mb-4 font-medium text-lg" htmlFor={id}>
+        {label}
+      </label>
+      <input
+        className="block w-full h-8 border-b-[1px] border-tertiary"
+        type="text"
+        id={id}
+        ref={inputRef}
+        placeholder={placeholder}
+        value={value}
+        onChange={e => onChange(e.target.value)}
+        disabled={disabled}
+      />
+    </div>
+  );
+}
+
+export interface OptionInputProps {
+  label: string;
+  placeholder: string;
+  disabled: boolean;
+  options: Poll['options'];
+  /** Callback function to add a new option. It receives the option text and a callback to clear the input. */
+  onAdd: (option: string, clearInputCb: () => void) => void;
+  /** Callback function to remove an option by its id. */
+  onRemove: (id: number) => void;
+  inputRef: React.RefObject<HTMLInputElement | null>;
+}
+export function OptionInput({ options, onAdd, onRemove, inputRef, label, placeholder, disabled }: OptionInputProps) {
+  const [optionValue, setOptionValue] = useState('');
+  const id = useId();
+
+  function handleAddOption() {
+    onAdd(optionValue.trim(), () => setOptionValue(''));
+  }
+
+  function handleKeyDown(event: React.KeyboardEvent<HTMLInputElement>) {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      handleAddOption();
+    }
+  }
+
+  return (
+    <div className="mb-7">
+      <label className="block mb-4 font-medium text-lg" htmlFor={id}>
+        {label}
+      </label>
+      <div className="flex gap-1">
+        <input
+          className="flex-grow h-8 border-b-[1px] border-tertiary"
+          type="text"
+          value={optionValue}
+          onChange={e => setOptionValue(e.target.value)}
+          onKeyDown={handleKeyDown}
+          id={id}
+          ref={inputRef}
+          placeholder={placeholder}
+          disabled={disabled}
+        />
+        <button
+          className="text-3xl leading-none text-white bg-primary rounded-full w-[1.1em] active:bg-[#227A66]"
+          type="button"
+          onClick={handleAddOption}
+          disabled={disabled}
+        >
+          +
+        </button>
+      </div>
+      {options.length > 0 && (
+        <div className="border border-tertiary mt-4">
+          {options.map(option => (
+            <div key={option.id} className="flex gap-4 w-full border-b border-tertiary last:border-none p-3">
+              <p className="flex-1 font-medium text-xl overflow-hidden text-ellipsis">{option.text}</p>
+              <button
+                type="button"
+                onClick={() => onRemove(option.id)}
+                className="font-medium text-xs text-primary"
+                disabled={disabled}
+              >
+                Remove
+              </button>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }

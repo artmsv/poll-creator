@@ -1,10 +1,10 @@
 # Poll creator
 
-This project was setup as an SPA with React.js, React-Router, Tailwind and Vite as bundler.
+This project was setup as an SPA with React.js, React-Router, Tailwind, Vite as bundler and pnpm as package manager (npm should work as well).
 
 ## How to start
 
-To quick start a project run `start` command
+To quickly start the project, run the `start` command.
 
 ## Structure
 This project follows a typical minimum React.js application structure:
@@ -27,8 +27,11 @@ I'v tried to follow figma styles as close as possible without changing default s
 
 ### Form Validation
 
-I have implemented the validations as specified in the Figma design.
+I have implemented the validations as specified in the Figma design. However, there are some additional check can be implemented:
 
-Additionally, a validation could be added to check for minimum and maximum character lengths for each field.
+- check for minimum and maximum character lengths for each field
+- check for maximum amount of options
+- another potential validation is to ensure that the same question does not already exist in the poll
 
-Another potential validation is to ensure that the same question does not already exist in the poll.
+### DX
+There are some pages with more error messages and flags that could be normalized into separate components or hooks for better readability and developer experience. At this moment, I didn't take this path to reduce time for completing the project.
